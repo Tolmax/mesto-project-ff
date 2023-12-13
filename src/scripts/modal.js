@@ -1,70 +1,58 @@
-//export {openProfileEdit, closeProfileEdit, escClose, handleFormSubmit, generatePopup, openCard, closeCard};
-export {escClose, generatePopup, openCard, closeCard, openProfileEdit, closeProfileEdit, 
-    openProfileAdd, closeProfileAdd};
+export { escClose, openPopup, closePopup };
 
 
 
-//ФУНКЦИЯ ОТКРЫТИЯ КАРТОЧКИ ПО КЛИКУ НА НЕЙ
-const openPopupElement = document.querySelector(".popup_type_image");
-const openPopupElementImage = openPopupElement.querySelector(".popup__image");
-const openPopupElementCaption = openPopupElement.querySelector(".popup__caption");
-
-function generatePopup(initialCardsLink, initialCardsName) {
-    openPopupElementImage.src = initialCardsLink; //вставляем ссылку из карточки
-    openPopupElementCaption.textContent = initialCardsName; //вставляем название карточки
-    openPopupElementImage.alt = initialCardsName; //вставляем название карточки
-    openCard(openPopupElement);
-  }
-  
-function openCard() {
-    openPopupElement.classList.add("popup_is-opened");
-    document.addEventListener("keydown", escClose);
-  }
-  
-function closeCard() {
-    openPopupElement.classList.remove("popup_is-opened");
-    document.removeEventListener("keydown", escClose);
-  }
-
-//ФУНКЦИЯ ОТКРЫТИЯ/РЕДАКТИРОВАНИЯ КАРТОЧКИ ПРОФАЙЛ 
-
+const openProfileEditButton = document.querySelector(".profile__edit-button");
 const openPopupProfileElement = document.querySelector(".popup_type_edit");
+const closePopupEditButton =
+  openPopupProfileElement.querySelector(".popup__close");
 
-function openProfileEdit() { //функция вставки значений полей импут
-    let profName = document.querySelector(".profile__title");
-    let profJobtitle = document.querySelector(".profile__description");
-    let nameInput = document.querySelector(".popup__input_type_name");
-    let jobInput = document.querySelector(".popup__input_type_description");
+const openCardAddButton = document.querySelector(".profile__add-button");
+const openPopupAddElement = document.querySelector(".popup_type_new-card");
+const closePopupAddButton = openPopupAddElement.querySelector(".popup__close");
 
+const nameInput = document.querySelector(".popup__input_type_name");
+const jobInput = document.querySelector(".popup__input_type_description");
+const profName = document.querySelector(".profile__title");
+const profJobtitle = document.querySelector(".profile__description");
+
+const openPopupElement = document.querySelector(".popup_type_image");
+const closePopupButton = openPopupElement.querySelector(".popup__close");
+
+function openPopup(evt) {
+  if (evt.target === openProfileEditButton) {
     nameInput.value = profName.textContent;
     jobInput.value = profJobtitle.textContent;
     openPopupProfileElement.classList.add("popup_is-opened");
     document.addEventListener("keydown", escClose);
   }
-function closeProfileEdit() {
-    openPopupProfileElement.classList.remove("popup_is-opened");
-    document.removeEventListener("keydown", escClose);
-  }
-
-// ДОБАВЛЯЕМ НОВУЮ КАРТОЧКУ
-
-const openPopupAddElement = document.querySelector(".popup_type_new-card");
-function openProfileAdd() {
+  if (evt.target === openCardAddButton) {
     openPopupAddElement.classList.add("popup_is-opened");
     document.addEventListener("keydown", escClose);
   }
-function closeProfileAdd() {
+}
+
+function closePopup(evt) {
+  if (evt.target === closePopupEditButton) {
+    openPopupProfileElement.classList.remove("popup_is-opened");
+    document.removeEventListener("keydown", escClose);
+  }
+  if (evt.target === closePopupAddButton) {
     openPopupAddElement.classList.remove("popup_is-opened");
     document.removeEventListener("keydown", escClose);
   }
+  if (evt.target === closePopupButton) {
+    openPopupElement.classList.remove("popup_is-opened");
+    document.removeEventListener("keydown", escClose);
+  }
+}
 
 function escClose(evt) {
     if (evt.key === "Escape") {
       console.log(evt);
-      closeProfileEdit();
-      closeProfileAdd();
-      closeCard();
+      openPopupProfileElement.classList.remove("popup_is-opened");
+      openPopupAddElement.classList.remove("popup_is-opened");
+      openPopupElement.classList.remove("popup_is-opened");
+      document.addEventListener("keydown", escClose);
     }
   }
-
-  //openPopupAddElement.classList.add("popup_is-animated");

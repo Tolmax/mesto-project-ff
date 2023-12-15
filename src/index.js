@@ -5,7 +5,7 @@ import {
   deleteCard,
   generatePopup,
   likeCard,
-} from "./scripts/card.js"; 
+} from "./scripts/card.js";
 import { openPopup, closeEsc } from "./scripts/modal.js";
 
 const cardsOnline = document.querySelector(".places__list");
@@ -38,7 +38,7 @@ const cardLink = openPopupAddElement.querySelector(".popup__input_type_url");
 //СОЗДАНИЕ КАРТОЧЕК
 
 initialCards.forEach(function ({ link, name }) {
-  const cardNew = createCard(link, name, deleteCard, generatePopup, likeCard); 
+  const cardNew = createCard(link, name, deleteCard, generatePopup, likeCard);
   cardsOnline.append(cardNew);
 });
 

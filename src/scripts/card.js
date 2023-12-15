@@ -23,11 +23,6 @@ function createCard(
   cardImage.src = initialCardsLink;
 
   deleteButton.addEventListener("click", deleteCard);
-  
-  //deleteButton.addEventListener("click", function() {
-  // const listItem = deleteButton.closest('.card');
-  // listItem.remove();
-  //});
 
   cardImage.addEventListener("click", function () {
     generatePopup(initialCardsLink, initialCardsName);
@@ -45,18 +40,8 @@ function likeCard(evt) {
 }
 
 function deleteCard(evt) {
-  evt.target.parentElement.remove();
-};
-
-//function deleteCard(evt) {
-//  evt.target.parentElement.remove();
-//};
-
-
-  //const deleteButton = cardElement.querySelector(".card__delete-button");
-  //const listItem = deleteButton.closest('.card');
-
-//ФУНКЦИЯ ОТКРЫТИЯ КАРТОЧКИ ПО КЛИКУ НА НЕЙ
+  evt.target.closest(".card").remove();
+}
 
 function generatePopup(initialCardsLink, initialCardsName) {
   const openPopupElement = document.querySelector(".popup_type_image");

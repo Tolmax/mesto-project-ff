@@ -1,18 +1,13 @@
 import "./pages/index.css";
 import { initialCards } from "./scripts/cards.js";
-import {
-  createCard,
-  deleteCard,
-  generatePopup,
-  likeCard,
-} from "./scripts/card.js";
-import { openPopup, closeEsc } from "./scripts/modal.js";
+import { createCard, deleteCard, likeCard } from "./scripts/card.js";
+import { openPopup, closePopup, closeEsc } from "./scripts/modal.js";
 
 const cardsOnline = document.querySelector(".places__list");
 
 const openProfileEditButton = document.querySelector(".profile__edit-button");
 const openPopupProfileElement = document.querySelector(".popup_type_edit");
-//const closePopupEditButton = document.querySelector(".popup__close");
+const closePopupEditButton = document.querySelector(".popup__close");
 
 const nameInput = document.querySelector(".popup__input_type_name");
 const jobInput = document.querySelector(".popup__input_type_description");
@@ -23,17 +18,21 @@ const submitForm = openPopupProfileElement.querySelector(".popup__form");
 
 const openCardAddButton = document.querySelector(".profile__add-button");
 const openPopupAddElement = document.querySelector(".popup_type_new-card");
-//const closePopupAddButton = openPopupAddElement.querySelector(".popup__close");
+const closePopupAddButton = openPopupAddElement.querySelector(".popup__close");
 
 const submitCard = openPopupAddElement.querySelector(".popup__form");
 
 const openPopupElement = document.querySelector(".popup_type_image");
-//const closePopupButton = openPopupElement.querySelector(".popup__close");
+const closePopupButton = openPopupElement.querySelector(".popup__close");
 
 const cardName = openPopupAddElement.querySelector(
   ".popup__input_type_card-name"
 );
 const cardLink = openPopupAddElement.querySelector(".popup__input_type_url");
+
+const openPopupElementImage = openPopupElement.querySelector(".popup__image");
+const openPopupElementCaption =
+  openPopupElement.querySelector(".popup__caption");
 
 //СОЗДАНИЕ КАРТОЧЕК
 
@@ -50,9 +49,9 @@ openProfileEditButton.addEventListener("click", function () {
   jobInput.value = profJobtitle.textContent;
   openPopup(openPopupProfileElement);
 });
-//closePopupEditButton.addEventListener("click", function() {
-//  closePopup(openPopupProfileElement);
-//});
+closePopupEditButton.addEventListener("click", function () {
+  closePopup(openPopupProfileElement);
+});
 
 //РЕДАКТИРОВАНИЕ ПРОФИЛЯ И ОТПРАВКА //СОРАНЯЕМ ИЗМЕНЕНИЯ В ПРОФАЙЛЕ
 
@@ -70,9 +69,9 @@ function handleFormSubmit(evt) {
 openCardAddButton.addEventListener("click", function () {
   openPopup(openPopupAddElement);
 });
-//closePopupAddButton.addEventListener("click", function() {
-// closePopup(openPopupAddElement);
-//});
+closePopupAddButton.addEventListener("click", function () {
+  closePopup(openPopupAddElement);
+});
 
 //СОРАНЯЕМ ИЗМЕНЕНИЯ В НАЗВАНИИ НОВОЙ КАРТОЧКИ
 
@@ -88,8 +87,18 @@ function handlecardSubmit(evt) {
   document.removeEventListener("keydown", closeEsc);
 }
 
-// ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕ (ОТКРЫВАЕМ В card.js))
+// ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕЁ (ОТКРЫВАЕМ В card.js))
 
-//closePopupButton.addEventListener("click", function() {
-//  closePopup(openPopupElement);
-//});
+closePopupButton.addEventListener("click", function () {
+  closePopup(openPopupElement);
+});
+
+// Ф-Я ОТКРЫВАНИЯ КАРТОЧКИ ПРИ КЛИКЕ
+
+function generatePopup(initialCardsLink, initialCardsName) {
+  openPopupElementImage.src = initialCardsLink;
+  openPopupElementCaption.textContent = initialCardsName;
+  openPopupElementImage.alt = initialCardsName;
+  openPopupElement.classList.add("popup_is-opened");
+  document.addEventListener("keydown", closeEsc);
+}

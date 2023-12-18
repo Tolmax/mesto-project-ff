@@ -1,5 +1,4 @@
-export { createCard, deleteCard, generatePopup, likeCard };
-import { closeEsc } from "./modal.js";
+export { createCard, deleteCard, likeCard };
 
 const cardTemplate = document
   .querySelector("#card-template")
@@ -16,7 +15,7 @@ function createCard(
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
   const deleteButton = cardElement.querySelector(".card__delete-button");
-  const likeButton = document.querySelector(".places__list");
+  const likeButton = cardElement.querySelector(".card__like-button");
 
   cardTitle.textContent = initialCardsName;
   cardImage.alt = "фотография " + initialCardsName;
@@ -41,16 +40,4 @@ function likeCard(evt) {
 
 function deleteCard(evt) {
   evt.target.closest(".card").remove();
-}
-
-function generatePopup(initialCardsLink, initialCardsName) {
-  const openPopupElement = document.querySelector(".popup_type_image");
-  const openPopupElementImage = openPopupElement.querySelector(".popup__image");
-  const openPopupElementCaption =
-    openPopupElement.querySelector(".popup__caption");
-  openPopupElementImage.src = initialCardsLink;
-  openPopupElementCaption.textContent = initialCardsName;
-  openPopupElementImage.alt = initialCardsName;
-  openPopupElement.classList.add("popup_is-opened");
-  document.addEventListener("keydown", closeEsc);
 }

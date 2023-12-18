@@ -39,29 +39,19 @@ function closeEsc(evt) {
 }
 //ЗАКРЫВАЕМ ПО КЛИКУ ПО ПОЛЮ OVERLAY И КРЕСТИКУ
 
-popups.forEach((popup) => {
-  popup.addEventListener("mousedown", (evt) => {
-    if (evt.target.classList.contains("popup_is-opened")) {
-      closePopup(popup);
-    }
-    if (evt.target.classList.contains("popup__close")) {
-      closePopup(popup);
+popups.forEach(function (item) {
+  item.addEventListener("click", function (evt) {
+    if (evt.target === item) {
+      openPopupProfileElement.classList.remove("popup_is-opened");
+      openPopupAddElement.classList.remove("popup_is-opened");
+      openPopupElement.classList.remove("popup_is-opened");
+      document.addEventListener("keydown", closeEsc);
     }
   });
 });
 
 //АЛЬТЕРНАТИВА ЗАКРЫТИЮ КЛИКУ ПО ПОЛЮ
 
-//popups.forEach(function (item) {
-//item.addEventListener("click", function (evt) {
-//  if (evt.target === item) {
-//    openPopupProfileElement.classList.remove("popup_is-opened");
-//    openPopupAddElement.classList.remove("popup_is-opened");
-//    openPopupElement.classList.remove("popup_is-opened");
-//    document.addEventListener("keydown", closeEsc);
-//  }
-//});
-//});
 //document.addEventListener('click', function(evt) {
 //  const closepopupsOverley = evt.target;
 //  if (popupOverley.matches('.popup')) {
@@ -71,3 +61,14 @@ popups.forEach((popup) => {
 //  document.addEventListener("keydown", escClose);
 //  }
 //})
+
+//popups.forEach((popup) => {
+//  popup.addEventListener("mousedown", (evt) => {
+//    if (evt.target.classList.contains("popup_is-opened")) {
+//      closePopup(popup);
+//    }
+//    if (evt.target.classList.contains("popup__close")) {
+//      closePopup(popup);
+//    }
+//  });
+//});

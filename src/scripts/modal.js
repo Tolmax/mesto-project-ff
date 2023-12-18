@@ -31,9 +31,9 @@ function closePopup(popup) {
 
 function closeEsc(evt) {
   if (evt.key === "Escape") {
-    openPopupProfileElement.classList.remove("popup_is-opened");
-    openPopupAddElement.classList.remove("popup_is-opened");
-    openPopupElement.classList.remove("popup_is-opened");
+    closePopup(openPopupProfileElement);
+    closePopup(openPopupAddElement);
+    closePopup(openPopupElement);
     document.removeEventListener("keydown", closeEsc);
   }
 }
@@ -42,9 +42,9 @@ function closeEsc(evt) {
 popups.forEach(function (item) {
   item.addEventListener("click", function (evt) {
     if (evt.target === item) {
-      openPopupProfileElement.classList.remove("popup_is-opened");
-      openPopupAddElement.classList.remove("popup_is-opened");
-      openPopupElement.classList.remove("popup_is-opened");
+      closePopup(openPopupProfileElement);
+      closePopup(openPopupAddElement);
+      closePopup(openPopupElement);
       document.addEventListener("keydown", closeEsc);
     }
   });
@@ -72,3 +72,7 @@ popups.forEach(function (item) {
 //    }
 //  });
 //});
+
+    //openPopupProfileElement.classList.remove("popup_is-opened");
+    //openPopupAddElement.classList.remove("popup_is-opened");
+    //openPopupElement.classList.remove("popup_is-opened");

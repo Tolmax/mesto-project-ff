@@ -60,7 +60,7 @@ function handleFormSubmit(evt) {
   evt.preventDefault();
   profName.textContent = nameInput.value;
   profJobtitle.textContent = jobInput.value;
-  openPopupProfileElement.classList.remove("popup_is-opened");
+  closePopup(openPopupProfileElement);
   document.removeEventListener("keydown", closeEsc);
 }
 
@@ -78,12 +78,12 @@ closePopupAddButton.addEventListener("click", function () {
 submitCard.addEventListener("submit", handlecardSubmit);
 function handlecardSubmit(evt) {
   evt.preventDefault();
-  const cardadd = createCard(cardLink.value, cardName.value, deleteCard);
+  const cardadd = createCard(cardLink.value, cardName.value, deleteCard, generatePopup, likeCard);
   cardsOnline.prepend(cardadd);
   evt.target.reset();
   //cardLink.value = '';
   //cardName.value = '';
-  openPopupAddElement.classList.remove("popup_is-opened");
+  closePopup(openPopupAddElement);
   document.removeEventListener("keydown", closeEsc);
 }
 

@@ -34,7 +34,6 @@ function closeEsc(evt) {
     closePopup(openPopupProfileElement);
     closePopup(openPopupAddElement);
     closePopup(openPopupElement);
-    document.removeEventListener("keydown", closeEsc);
   }
 }
 //ЗАКРЫВАЕМ ПО КЛИКУ ПО ПОЛЮ OVERLAY И КРЕСТИКУ
@@ -45,7 +44,6 @@ popups.forEach(function (item) {
       closePopup(openPopupProfileElement);
       closePopup(openPopupAddElement);
       closePopup(openPopupElement);
-      document.addEventListener("keydown", closeEsc);
     }
   });
 });

@@ -1,7 +1,7 @@
 import "./pages/index.css";
 import { initialCards } from "./scripts/cards.js";
 import { createCard, deleteCard, likeCard } from "./scripts/card.js";
-import { openPopup, closePopup, closeEsc } from "./scripts/modal.js";
+import { openPopup, closePopup, } from "./scripts/modal.js";
 
 const cardsOnline = document.querySelector(".places__list");
 
@@ -43,7 +43,6 @@ initialCards.forEach(function ({ link, name }) {
 
 //ОТКРЫТИЯ/ЗАКРЫТИЕ КАРТОЧКИ ПРОФАЙЛ
 
-//openProfileEditButton.addEventListener("click", openPopup);
 openProfileEditButton.addEventListener("click", function () {
   nameInput.value = profName.textContent;
   jobInput.value = profJobtitle.textContent;
@@ -61,7 +60,6 @@ function handleFormSubmit(evt) {
   profName.textContent = nameInput.value;
   profJobtitle.textContent = jobInput.value;
   closePopup(openPopupProfileElement);
-  document.removeEventListener("keydown", closeEsc);
 }
 
 // ДОБАВЛЯЕМ/ЗАКРЫВАЕМ НОВУЮ КАРТОЧКУ
@@ -84,7 +82,6 @@ function handlecardSubmit(evt) {
   //cardLink.value = '';
   //cardName.value = '';
   closePopup(openPopupAddElement);
-  document.removeEventListener("keydown", closeEsc);
 }
 
 // ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕЁ (ОТКРЫВАЕМ В card.js))
@@ -99,6 +96,6 @@ function generatePopup(initialCardsLink, initialCardsName) {
   openPopupElementImage.src = initialCardsLink;
   openPopupElementCaption.textContent = initialCardsName;
   openPopupElementImage.alt = initialCardsName;
-  openPopupElement.classList.add("popup_is-opened");
-  document.addEventListener("keydown", closeEsc);
+  openPopup(openPopupElement);
+
 }

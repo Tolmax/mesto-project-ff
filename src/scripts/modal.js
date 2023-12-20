@@ -1,4 +1,4 @@
-export { closeEsc, openPopup, closePopup };
+export { openPopup, closePopup };
 
 const openProfileEditButton = document.querySelector(".profile__edit-button");
 const openPopupProfileElement = document.querySelector(".popup_type_edit");

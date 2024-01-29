@@ -1,21 +1,14 @@
 export { closeEsc, openPopup, closePopup };
+import { form, config } from "../index";
+import { clearValidation } from "../scripts/validation";
 
-const openProfileEditButton = document.querySelector(".profile__edit-button");
 const openPopupProfileElement = document.querySelector(".popup_type_edit");
-const closePopupEditButton =
-  openPopupProfileElement.querySelector(".popup__close");
 
-const openCardAddButton = document.querySelector(".profile__add-button");
 const openPopupAddElement = document.querySelector(".popup_type_new-card");
-const closePopupAddButton = openPopupAddElement.querySelector(".popup__close");
-
-const nameInput = document.querySelector(".popup__input_type_name");
-const jobInput = document.querySelector(".popup__input_type_description");
-const profName = document.querySelector(".profile__title");
-const profJobtitle = document.querySelector(".profile__description");
 
 const openPopupElement = document.querySelector(".popup_type_image");
-const closePopupButton = openPopupElement.querySelector(".popup__close");
+
+const openPopupAvatarElement = document.querySelector(".popup_type_avatar");
 
 const popups = document.querySelectorAll(".popup");
 
@@ -31,46 +24,23 @@ function closePopup(popup) {
 
 function closeEsc(evt) {
   if (evt.key === "Escape") {
+    clearValidation(form, config);
     closePopup(openPopupProfileElement);
     closePopup(openPopupAddElement);
     closePopup(openPopupElement);
+    closePopup(openPopupAvatarElement);
   }
 }
-//ЗАКРЫВАЕМ ПО КЛИКУ ПО ПОЛЮ OVERLAY И КРЕСТИКУ
+//ЗАКРЫВАЕМ ПО КЛИКУ ПО ПОЛЮ OVERLAY
 
 popups.forEach(function (item) {
   item.addEventListener("click", function (evt) {
     if (evt.target === item) {
+      clearValidation(form, config);
       closePopup(openPopupProfileElement);
       closePopup(openPopupAddElement);
       closePopup(openPopupElement);
+      closePopup(openPopupAvatarElement);
     }
   });
 });
-
-//АЛЬТЕРНАТИВА ЗАКРЫТИЮ КЛИКУ ПО ПОЛЮ
-
-//document.addEventListener('click', function(evt) {
-//  const closepopupsOverley = evt.target;
-//  if (popupOverley.matches('.popup')) {
-//  openPopupProfileElement.classList.remove("popup_is-opened");
-//  openPopupAddElement.classList.remove("popup_is-opened");
-//  openPopupElement.classList.remove("popup_is-opened");
-//  document.addEventListener("keydown", escClose);
-//  }
-//})
-
-//popups.forEach((popup) => {
-//  popup.addEventListener("mousedown", (evt) => {
-//    if (evt.target.classList.contains("popup_is-opened")) {
-//      closePopup(popup);
-//    }
-//    if (evt.target.classList.contains("popup__close")) {
-//      closePopup(popup);
-//    }
-//  });
-//});
-
-    //openPopupProfileElement.classList.remove("popup_is-opened");
-    //openPopupAddElement.classList.remove("popup_is-opened");
-    //openPopupElement.classList.remove("popup_is-opened");

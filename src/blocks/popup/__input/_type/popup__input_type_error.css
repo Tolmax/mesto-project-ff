@@ -1,0 +1,5 @@
+.popup__input_type_error {
+  text-decoration: underline;
+  text-decoration-color: #FF0000;
+  text-decoration-style: 1px;
+}

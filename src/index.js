@@ -23,6 +23,8 @@ export {
   isMyId,
 };
 
+console.log(2);
+
 
 
 const cardsOnline = document.querySelector(".places__list");

@@ -1,17 +1,15 @@
-//export { createCard };
-import {
-  httpDeleteMyCard,
-  httpLikeCard,
-  httpDislikeCard,
-} from "./api.js";
+import { httpDeleteMyCard, httpLikeCard, httpDislikeCard } from "./api.js";
 import { isMyId } from "../index.js";
+import {
+  openPopupCardDeleteElement,
+  submitCardDelete,
+  //closePopupCardDeleteButton,
+} from "./constants.js";
+import { openPopup, closePopup, closeEsc } from "./modal.js";
 
 const cardTemplate = document
   .querySelector("#card-template")
   .content.querySelector(".card");
-
-//const isMyId = getMyId();
-//console.log(isMyId);
 
 /**
  * @typedef {Object} CardData
@@ -38,7 +36,6 @@ const cardTemplate = document
  * @param { function } generatePopup
  */
 function createCard(cardData, generatePopup) {
-
   const cardElement = cardTemplate.cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
@@ -54,7 +51,6 @@ function createCard(cardData, generatePopup) {
   cardNumber.textContent = cardData.likes.length;
 
   const changeLikeButtonActiveClass = (isCardILikedLocal) => {
-
     const activeClass = "card__like-button_is-active";
 
     if (isCardILikedLocal === true) {
@@ -70,17 +66,26 @@ function createCard(cardData, generatePopup) {
     deleteButton.style.visibility = "hidden";
   } else {
     deleteButton.addEventListener("click", function (evt) {
+
+      openPopup(openPopupCardDeleteElement);
+      let event = evt;
+      console.log(event);
+      evt.preventDefault();
       
-      httpDeleteMyCard(cardData._id)
-        .then(() => {
-          deleteCard(evt);
-        })
-        .catch(() => {
-          console.error("Не удалось удалить карточку");
-    })
-  })
+      submitCardDelete.addEventListener("click", cardDeleteSubmit);
+
+      function cardDeleteSubmit(evt) {
+        evt.preventDefault();
+
+        httpDeleteMyCard(cardData._id).then(() => {
+          closePopup(openPopupCardDeleteElement);
+          document.removeEventListener("keydown", closeEsc);
+          deleteCard(event);
+        });
+      }
+    });
   }
-  
+
   cardImage.addEventListener("click", function () {
     generatePopup(cardData.link, cardData.name);
   });
@@ -128,12 +133,10 @@ function cardLikedByUs(cardData) {
       return true;
     }
   }
-
-  return false;
 }
 
 function deleteCard(evt) {
   evt.target.closest(".card").remove();
 }
 
-export { createCard, cardLikedByUs };
+export { createCard };

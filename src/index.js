@@ -2,82 +2,48 @@ import "./pages/index.css";
 //import { initialCards } from "./scripts/cards.js";
 import {
   initApp,
-  changeProfileData,
-  addNewCard,
+  httpChangeProfileData,
+  httpAddNewCard,
   getMyId,
   httpChangeAvatarImage,
+  httpDeleteMyCard
 } from "./scripts/api.js";
 import { createCard } from "./scripts/card.js";
 import { openPopup, closePopup, closeEsc } from "./scripts/modal.js";
 import { enableValidation } from "./scripts/validation.js";
 import { clearValidation } from "./scripts/validation.js";
-export {
-  generatePopup,
+export { generatePopup, isMyId };
+import {
   cardsOnline,
+  openProfileEditButton,
+  openPopupProfileElement,
+  closePopupEditButton,
+  submitForm,
+  openAvatarButton,
+  openPopupAvatarElement,
+  closePopupAvatarButton,
+  submitAvatar,
   nameInput,
   jobInput,
-  avatarInput,
+  //avatarInput,
   profName,
   profJobtitle,
   profAvatar,
-  isMyId,
-};
-
-console.log(2);
-
-
-
-const cardsOnline = document.querySelector(".places__list");
-
-const openProfileEditButton = document.querySelector(".profile__edit-button");
-const openPopupProfileElement = document.querySelector(".popup_type_edit");
-const closePopupEditButton =
-  openPopupProfileElement.querySelector(".popup__close");
-const submitForm = openPopupProfileElement.querySelector(".popup__form");
-
-const openAvatarButton = document.querySelector(".profile__image");
-const openPopupAvatarElement = document.querySelector(".popup_type_avatar");
-const closePopupAvatarButton =
-  openPopupAvatarElement.querySelector(".popup__close");
-const submitAvatar = openPopupAvatarElement.querySelector(".popup__form");
-
-const nameInput = document.querySelector(".popup__input_type_name");
-const jobInput = document.querySelector(".popup__input_type_description");
-const avatarInput = document.querySelector(".popup__input_type_urlavatar");
-
-const profName = document.querySelector(".profile__title");
-const profJobtitle = document.querySelector(".profile__description");
-const profAvatar = document.querySelector(".profile__image");
-
-const openCardAddButton = document.querySelector(".profile__add-button");
-const openPopupAddElement = document.querySelector(".popup_type_new-card");
-const closePopupAddButton = openPopupAddElement.querySelector(".popup__close");
-const submitCard = openPopupAddElement.querySelector(".popup__form");
-
-const openPopupElement = document.querySelector(".popup_type_image");
-const closePopupButton = openPopupElement.querySelector(".popup__close");
-
-
-
-const openPopupElementImage = openPopupElement.querySelector(".popup__image");
-const openPopupElementCaption =
-  openPopupElement.querySelector(".popup__caption");
-
-export const form = document.querySelector(".popup__form");
-//const formInput = form.querySelector('.popup__input');
-//const formError = form.querySelector('.popup__input-error');
-const button = form.querySelector(".popup__button");
-
-export const config = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_active",
-};
-console.log("Problemm");
-console.log('Hello, World!')
+  openCardAddButton,
+  openPopupAddElement,
+  closePopupAddButton,
+  submitCard,
+  openPopupElement,
+  closePopupButton,
+  openPopupElementImage,
+  openPopupElementCaption,
+  form,
+  button,
+  config,
+  openPopupCardDeleteElement,
+  closePopupCardDeleteButton,
+  submitCardDelete
+} from "./scripts/constants.js";
 
 //СОЗДАНИЕ КАРТОЧЕК
 
@@ -85,6 +51,7 @@ console.log('Hello, World!')
 //   const cardNew = createCard(link, name, deleteCard, generatePopup, likeCard);
 //   cardsOnline.append(cardNew);
 // });
+
 const isMyId = await getMyId();
 console.log(isMyId);
 initApp();
@@ -98,11 +65,11 @@ function generatePopup(initialCardsLink, initialCardsName) {
   openPopupElement.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeEsc);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // включение валидации вызовом enableValidation все настройки передаются при вызове
 
 enableValidation(config, form);
+
 //ОТКРЫТИЯ/ЗАКРЫТИЕ КАРТОЧКИ ПРОФАЙЛ
 
 openProfileEditButton.addEventListener("click", function () {
@@ -118,14 +85,20 @@ closePopupEditButton.addEventListener("click", function () {
 //РЕДАКТИРОВАНИЕ ПРОФИЛЯ И ОТПРАВКА //СОРАНЯЕМ ИЗМЕНЕНИЯ В ПРОФАЙЛЕ
 
 submitForm.addEventListener("submit", handleFormSubmit);
+
 function handleFormSubmit(evt) {
   evt.preventDefault();
-  profName.textContent = nameInput.value;
-  profJobtitle.textContent = jobInput.value;
-  closePopup(openPopupProfileElement);
-  document.removeEventListener("keydown", closeEsc);
-  changeProfileData(evt);
-  clearValidation(form, config);
+  button.textContent = "Сохранить...";
+  //console.log(button);
+
+  httpChangeProfileData().then((data) => {
+    profName.textContent = data.name;
+    profJobtitle.textContent = data.about;
+    closePopup(openPopupProfileElement);
+    document.removeEventListener("keydown", closeEsc);
+    clearValidation(form, config);
+    button.textContent = "Сохранить";
+  });
 }
 
 // ДОБАВЛЯЕМ/ЗАКРЫВАЕМ НОВУЮ КАРТОЧКУ
@@ -144,20 +117,19 @@ submitCard.addEventListener("submit", handlecardSubmit);
 
 function handlecardSubmit(evt) {
   evt.preventDefault();
-  //button.textContent = 'Сохранить...'
-  //console.log(button);
-  addNewCard({ name: cardName.value, link: cardLink.value })
-  .then((data) => {
-    const createdCard = createCard(data, generatePopup);
+  button.textContent = "Сохранить...";
 
+  httpAddNewCard().then((data) => {
+    const createdCard = createCard(data, generatePopup);
     cardsOnline.prepend(createdCard);
     evt.target.reset();
     closePopup(openPopupAddElement);
     document.removeEventListener("keydown", closeEsc);
+    button.textContent = "Сохранить";
   });
 }
 //
-// ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕЁ (ОТКРЫВАЕМ В card.js))
+// ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕЁ)
 
 closePopupButton.addEventListener("click", function () {
   closePopup(openPopupElement);
@@ -175,18 +147,50 @@ closePopupAvatarButton.addEventListener("click", function () {
 
 ////////////////////////  СОХРАНЯЕМ НОВЫЙ АВАТАР //////////////////////
 
-
 submitAvatar.addEventListener("submit", avatarSubmit);
 
 function avatarSubmit(evt) {
   evt.preventDefault();
-  button.textContent = 'Сохранить...'
-  console.log(button);
-  httpChangeAvatarImage(evt)
-    .then(data => {
-      profAvatar.style.backgroundImage = `url(${data.avatar})`;
-      closePopup(openPopupAvatarElement);
-      document.removeEventListener("keydown", closeEsc);
-      clearValidation(form, config);
-    } )
-  }
+
+  httpChangeAvatarImage(evt).then((data) => {
+    profAvatar.style.backgroundImage = `url(${data.avatar})`;
+    closePopup(openPopupAvatarElement);
+    document.removeEventListener("keydown", closeEsc);
+    clearValidation(form, config);
+    button.textContent = "Сохранить";
+  });
+}
+/////////////////// ЗАКРЫТИЕ ПОПАПА ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ КАРТОЧКИ
+
+closePopupCardDeleteButton.addEventListener("click", function () {
+  clearValidation(form, config);
+  closePopup(openPopupCardDeleteElement);
+});
+
+// submitCardDelete.addEventListener("click", cardDeleteSubmit);
+  
+//   function cardDeleteSubmit(evt) {
+//     evt.preventDefault();
+
+//         httpDeleteMyCard(cardData._id)
+//           .then((res) => {
+//           if (res.ok) return res.json();
+//           return Promise.reject(`Ошибка: ${res.status}`);
+//           })
+          // .then(() => {
+          //   console.log(cardData._id)
+          //   closePopup(openPopupCardDeleteElement);
+          //   document.removeEventListener("keydown", closeEsc);
+          //   document.querySelector(".card").cardData._id.remove();
+          //   if (res = ok) {
+          //     console.log(event)
+          //     deleteCard(event);
+          //   }
+          // })
+          //  .then(() => {
+          //   deleteCard(event);
+          // })
+          // .catch(() => {
+          //   console.error("Не удалось удалить карточку");
+          // });
+      //}

@@ -124,7 +124,7 @@ export const clearValidation = (formElement, config) => {
     );
 
     inputList.forEach((inputElement) => {
-      console.log(inputElement);
+      //console.log(inputElement);
       inputElement.value = "";
       hideInputError(formElement, inputElement);
       inputElement.setCustomValidity("");

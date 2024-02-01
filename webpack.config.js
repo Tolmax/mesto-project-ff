@@ -9,7 +9,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    filename: 'mainasdada21312321.js',
     publicPath: '',
   },
   mode: 'development',

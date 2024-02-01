@@ -1,14 +1,38 @@
 export { closeEsc, openPopup, closePopup };
-import { form, config } from "../index";
-import { clearValidation } from "../scripts/validation";
+import {
+  // cardsOnline,
+  // openProfileEditButton,
+  openPopupProfileElement,
+  // closePopupEditButton,
+  // submitForm,
+  // openAvatarButton,
+  openPopupAvatarElement,
+  // closePopupAvatarButton,
+  // submitAvatar,
+  // nameInput,
+  // jobInput,
+  // avatarInput,
+  // profName,
+  // profJobtitle,
+  // profAvatar,
+  //isMyId,
+  // openCardAddButton,
+  openPopupAddElement,
+  // closePopupAddButton,
+  // submitCard,
+  openPopupElement,
+  // closePopupButton,
+  // openPopupElementImage,
+  // openPopupElementCaption,
+  form,
+  //button,
+  config,
+  openPopupCardDeleteElement,
+  //closePopupCardDeleteButton
+} from "./constants.js";
+import { clearValidation } from "./validation.js";
+//../scripts/validation
 
-const openPopupProfileElement = document.querySelector(".popup_type_edit");
-
-const openPopupAddElement = document.querySelector(".popup_type_new-card");
-
-const openPopupElement = document.querySelector(".popup_type_image");
-
-const openPopupAvatarElement = document.querySelector(".popup_type_avatar");
 
 const popups = document.querySelectorAll(".popup");
 
@@ -29,6 +53,7 @@ function closeEsc(evt) {
     closePopup(openPopupAddElement);
     closePopup(openPopupElement);
     closePopup(openPopupAvatarElement);
+    closePopup(openPopupCardDeleteElement);
   }
 }
 //ЗАКРЫВАЕМ ПО КЛИКУ ПО ПОЛЮ OVERLAY
@@ -41,6 +66,7 @@ popups.forEach(function (item) {
       closePopup(openPopupAddElement);
       closePopup(openPopupElement);
       closePopup(openPopupAvatarElement);
+      closePopup(openPopupCardDeleteElement);
     }
   });
 });

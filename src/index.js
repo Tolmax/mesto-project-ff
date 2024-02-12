@@ -6,7 +6,7 @@ import {
   httpAddNewCard,
   getMyId,
   httpChangeAvatarImage,
-  httpDeleteMyCard
+  // httpDeleteMyCard
 } from "./scripts/api.js";
 import { createCard } from "./scripts/card.js";
 import { openPopup, closePopup, closeEsc } from "./scripts/modal.js";
@@ -42,7 +42,8 @@ import {
   config,
   openPopupCardDeleteElement,
   closePopupCardDeleteButton,
-  submitCardDelete
+  // submitCardDelete,
+  // popups
 } from "./scripts/constants.js";
 
 //СОЗДАНИЕ КАРТОЧЕК
@@ -53,7 +54,7 @@ import {
 // });
 
 const isMyId = await getMyId();
-console.log(isMyId);
+// console.log(isMyId);
 initApp();
 
 // Ф-Я ОТКРЫВАНИЯ КАРТОЧКИ ПРИ КЛИКЕ
@@ -89,7 +90,6 @@ submitForm.addEventListener("submit", handleFormSubmit);
 function handleFormSubmit(evt) {
   evt.preventDefault();
   button.textContent = "Сохранить...";
-  //console.log(button);
 
   httpChangeProfileData().then((data) => {
     profName.textContent = data.name;
@@ -128,7 +128,7 @@ function handlecardSubmit(evt) {
     button.textContent = "Сохранить";
   });
 }
-//
+
 // ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕЁ)
 
 closePopupButton.addEventListener("click", function () {
@@ -166,31 +166,3 @@ closePopupCardDeleteButton.addEventListener("click", function () {
   clearValidation(form, config);
   closePopup(openPopupCardDeleteElement);
 });
-
-// submitCardDelete.addEventListener("click", cardDeleteSubmit);
-  
-//   function cardDeleteSubmit(evt) {
-//     evt.preventDefault();
-
-//         httpDeleteMyCard(cardData._id)
-//           .then((res) => {
-//           if (res.ok) return res.json();
-//           return Promise.reject(`Ошибка: ${res.status}`);
-//           })
-          // .then(() => {
-          //   console.log(cardData._id)
-          //   closePopup(openPopupCardDeleteElement);
-          //   document.removeEventListener("keydown", closeEsc);
-          //   document.querySelector(".card").cardData._id.remove();
-          //   if (res = ok) {
-          //     console.log(event)
-          //     deleteCard(event);
-          //   }
-          // })
-          //  .then(() => {
-          //   deleteCard(event);
-          // })
-          // .catch(() => {
-          //   console.error("Не удалось удалить карточку");
-          // });
-      //}

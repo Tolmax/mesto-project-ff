@@ -28,13 +28,12 @@ import {
   //button,
   config,
   openPopupCardDeleteElement,
-  //closePopupCardDeleteButton
+  //closePopupCardDeleteButton,
+  popups
 } from "./constants.js";
 import { clearValidation } from "./validation.js";
-//../scripts/validation
 
 
-const popups = document.querySelectorAll(".popup");
 
 function openPopup(popup) {
   popup.classList.add("popup_is-opened");

@@ -36,7 +36,11 @@ import {
   // openPopupElementCaption,
   // button,
   // form,
-  // config
+  // config,
+  // openPopupCardDeleteElement,
+  // closePopupCardDeleteButton,
+  // submitCardDelete,
+  // popups
 } from "./constants.js";
 
 const configFetch = {

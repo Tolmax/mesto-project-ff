@@ -1,35 +1,35 @@
 export {
-    cardsOnline,
-    openProfileEditButton,
-    openPopupProfileElement,
-    closePopupEditButton,
-    submitForm,
-    openAvatarButton,
-    openPopupAvatarElement,
-    closePopupAvatarButton,
-    submitAvatar,
-    nameInput,
-    jobInput,
-    avatarInput,
-    profName,
-    profJobtitle,
-    profAvatar,
-    //isMyId,
-    openCardAddButton,
-    openPopupAddElement,
-    closePopupAddButton,
-    submitCard,
-    openPopupElement,
-    closePopupButton,
-    openPopupElementImage,
-    openPopupElementCaption,
-    form,
-    button,
-    config,
-    openPopupCardDeleteElement,
-    closePopupCardDeleteButton,
-    submitCardDelete
-  };
+  cardsOnline,
+  openProfileEditButton,
+  openPopupProfileElement,
+  closePopupEditButton,
+  submitForm,
+  openAvatarButton,
+  openPopupAvatarElement,
+  closePopupAvatarButton,
+  submitAvatar,
+  nameInput,
+  jobInput,
+  avatarInput,
+  profName,
+  profJobtitle,
+  profAvatar,
+  openCardAddButton,
+  openPopupAddElement,
+  closePopupAddButton,
+  submitCard,
+  openPopupElement,
+  closePopupButton,
+  openPopupElementImage,
+  openPopupElementCaption,
+  form,
+  button,
+  config,
+  openPopupCardDeleteElement,
+  closePopupCardDeleteButton,
+  submitCardDelete,
+  popups
+};
 
 const cardsOnline = document.querySelector(".places__list");
 
@@ -61,8 +61,6 @@ const submitCard = openPopupAddElement.querySelector(".popup__form");
 const openPopupElement = document.querySelector(".popup_type_image");
 const closePopupButton = openPopupElement.querySelector(".popup__close");
 
-
-
 const openPopupElementImage = openPopupElement.querySelector(".popup__image");
 const openPopupElementCaption =
   openPopupElement.querySelector(".popup__caption");
@@ -81,7 +79,12 @@ const config = {
   errorClass: "popup__error_active",
 };
 
-const openPopupCardDeleteElement = document.querySelector('.popup_type_confirm');
+const openPopupCardDeleteElement = document.querySelector(
+  ".popup_type_confirm"
+);
 const closePopupCardDeleteButton =
-openPopupCardDeleteElement.querySelector(".popup__close");
-const submitCardDelete = openPopupCardDeleteElement.querySelector(".popup__button");
+  openPopupCardDeleteElement.querySelector(".popup__close");
+const submitCardDelete =
+  openPopupCardDeleteElement.querySelector(".popup__button");
+
+  const popups = document.querySelectorAll(".popup");

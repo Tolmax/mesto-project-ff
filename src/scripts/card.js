@@ -1,16 +1,11 @@
 import { httpDeleteMyCard, httpLikeCard, httpDislikeCard } from "./api.js";
 import { isMyId } from "../index.js";
-import {
-  openPopupCardDeleteElement,
-  submitCardDelete,
-  //closePopupCardDeleteButton,
-} from "./constants.js";
+import { openPopupCardDeleteElement, submitCardDelete } from "./constants.js";
 import { openPopup, closePopup, closeEsc } from "./modal.js";
 
 const cardTemplate = document
   .querySelector("#card-template")
   .content.querySelector(".card");
-
 
 function createCard(cardData, generatePopup) {
   const cardElement = cardTemplate.cloneNode(true);
@@ -19,8 +14,8 @@ function createCard(cardData, generatePopup) {
   const deleteButton = cardElement.querySelector(".card__delete-button");
   const likeButton = cardElement.querySelector(".card__like-button");
   const cardNumber = cardElement.querySelector(".card__like-number");
-
-  let isCardILiked = cardLikedByUs(cardData);
+  // let isCardILiked = cardLikedByUs(cardData);
+  // console.log(cardData);
 
   cardTitle.textContent = cardData.name;
   cardImage.alt = "фотография " + cardData.name;
@@ -42,24 +37,21 @@ function createCard(cardData, generatePopup) {
   if (isMyId !== cardData.owner._id) {
     deleteButton.style.visibility = "hidden";
   } else {
+    deleteButton.addEventListener("click", deleteBTN);
 
-  deleteButton.addEventListener("click", deleteBTN);
-      
-  function deleteBTN() {
-    openPopup(openPopupCardDeleteElement);
-    submitCardDelete.addEventListener("click", cardDeleteSubmit);
-    function cardDeleteSubmit() {
-    
-      httpDeleteMyCard(cardData._id).then(() => {
-        console.log(cardData._id);
-        closePopup(openPopupCardDeleteElement);
-        document.removeEventListener("keydown", closeEsc);
-        submitCardDelete.removeEventListener("click", cardDeleteSubmit);
-        deleteButton.closest(".card").remove();
-      });
+    function deleteBTN() {
+      openPopup(openPopupCardDeleteElement);
+      submitCardDelete.addEventListener("click", cardDeleteSubmit);
+      function cardDeleteSubmit() {
+        httpDeleteMyCard(cardData._id).then(() => {
+          console.log(cardData._id);
+          closePopup(openPopupCardDeleteElement);
+          document.removeEventListener("keydown", closeEsc);
+          submitCardDelete.removeEventListener("click", cardDeleteSubmit);
+          deleteButton.closest(".card").remove();
+        });
+      }
     }
-    };
-   
   }
 
   cardImage.addEventListener("click", function () {
@@ -101,7 +93,7 @@ function createCard(cardData, generatePopup) {
   return cardElement;
 }
 
-function cardLikedByUs(cardData) {
+let isCardILiked = function cardLikedByUs(cardData) {
   let cardIsLikedByUs = false;
 
   for (const userWhoLiked of cardData.likes) {
@@ -113,6 +105,5 @@ function cardLikedByUs(cardData) {
 // function deleteCard(evt) {
 //   evt.target.closest(".card").remove();
 // }
-
 
 export { createCard };

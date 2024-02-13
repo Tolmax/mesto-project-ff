@@ -74,7 +74,7 @@
       </div>
     </div>
     <div class="popup popup_type_avatar popup_is-animated">
-      <div class="popup__content">
+      <div class="popup__content" style="min-height: 272px">
         <button type="button" class="popup__close"></button>
         <h3 class="popup__title">Обновить аватар</h3>
         <form class="popup__form" name="new-avatar" novalidate>
@@ -87,12 +87,10 @@
     </div>
 
     <div class="popup popup_type_confirm popup_is-animated">
-      <div class="popup__content">
+      <div class="popup__content" style="min-height: 181px">
         <button type="button" class="popup__close"></button>
         <h3 class="popup__title">Вы уверены?</h3>
-        <!--<form class="popup__form" name="confirm">-->
-          <button type="button" class="button popup__button">ДА</button>
-        <!--</form>-->
+        <button type="button" class="button popup__button">ДА</button>
       </div>
     </div>
 
@@ -104,20 +102,20 @@
       </div>
     </div>
 
-  <template id="card-template">
-    <li class="places__item card">
-      <img class="card__image" src="" alt="" />
-      <button type="button" class="card__delete-button"></button>
-      <div class="card__description">
-        <h2 class="card__title">
-        </h2>
-        <div class="card__likeplace">
-          <button type="button" class="card__like-button"></button>
-          <h3 class="card__like-number"></h3>
+    <template id="card-template">
+      <li class="places__item card">
+        <img class="card__image" src="" alt="" />
+        <button type="button" class="card__delete-button"></button>
+        <div class="card__description">
+          <h2 class="card__title">
+          </h2>
+          <div class="card__likeplace">
+            <button type="button" class="card__like-button"></button>
+            <h3 class="card__like-number"></h3>
+          </div>
         </div>
-      </div>
-    </li>
-  </template>
+      </li>
+    </template>
 </body>
 
 </html>

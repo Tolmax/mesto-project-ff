@@ -4,7 +4,7 @@ import {
   initApp,
   httpChangeProfileData,
   httpAddNewCard,
-  getMyId,
+  httpGetMyId,
   httpChangeAvatarImage,
   // httpDeleteMyCard
 } from "./scripts/api.js";
@@ -53,7 +53,7 @@ import {
 //   cardsOnline.append(cardNew);
 // });
 
-const isMyId = await getMyId();
+const isMyId = await httpGetMyId();
 // console.log(isMyId);
 initApp();
 

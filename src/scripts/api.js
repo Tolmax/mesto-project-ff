@@ -3,7 +3,7 @@ export {
   httpChangeProfileData,
   httpAddNewCard,
   httpDeleteMyCard,
-  getMyId,
+  httpGetMyId,
   httpLikeCard,
   httpDislikeCard,
   httpChangeAvatarImage,
@@ -44,53 +44,51 @@ import {
 } from "./constants.js";
 
 const configFetch = {
-  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-3',
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-3",
   headers: {
-    authorization: 'c3983116-e362-4de3-b314-b984b8daa8fe',
-    'Content-Type': 'application/json'
-  }
-}
+    authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
+    "Content-Type": "application/json",
+  },
+};
 
 //////////////////// ПОЛУЧАЕМ ДАННЫЕ ПРОФИЛЯ С СЕРВЕРА/////////////
 
-function getMyId() {
-  return (
-    fetch(`${configFetch.baseUrl}/users/me`, {
-      headers: {
-        authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
-      .then((res) => res._id)
-  )
-  .catch((errorRes) => {
-    console.error(`Что-то пошло не так: ${errorRes.status}`);
-  });
-}
-
-function getProfileData() {
+function httpGetMyId() {
   return fetch(`${configFetch.baseUrl}/users/me`, {
     headers: {
       authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
     },
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Что-то пошло не так: ${res.status}`);
   })
-  .catch((errorRes) => {
-    console.error(`Что-то пошло не так: ${errorRes.status}`);
-  });
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Что-то пошло не так: ${res.status}`);
+    })
+    .then((res) => res._id)
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
+}
+
+function httpGetProfileData() {
+  return fetch(`${configFetch.baseUrl}/users/me`, {
+    headers: {
+      authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
+    },
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Что-то пошло не так: ${res.status}`);
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }
 
 function renderProfileInfo(profileData) {
-  ////console.log(profileData);
   profName.textContent = profileData.name;
   profJobtitle.textContent = profileData.about;
   profAvatar.style.backgroundImage = `url(${profileData.avatar})`;
@@ -98,25 +96,24 @@ function renderProfileInfo(profileData) {
 
 ////////////////////// ПОЛУЧАЕМ КАРТОЧКИ С СЕРВЕРА   //////////////////////
 
-function getCardsData() {
+function httpGetCardsData() {
   return fetch(`${configFetch.baseUrl}/cards`, {
     headers: {
       authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
     },
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Что-то пошло не так: ${res.status}`);
   })
-  .catch((errorRes) => {
-    console.error(`Что-то пошло не так: ${errorRes.status}`);
-  });
+    .then((res) => {
+      if (res.ok) {
+      return res.json();
+      }
+      return Promise.reject(`Что-то пошло не так: ${res.status}`);
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }
 
 function renderCards(cardsData) {
-  console.log(cardsData);
-
   for (const cardData of cardsData) {
     const cardNew = createCard(cardData, generatePopup);
     cardsOnline.append(cardNew);
@@ -124,7 +121,7 @@ function renderCards(cardsData) {
 }
 
 function initApp() {
-  Promise.all([getProfileData(), getCardsData()]).then(
+  Promise.all([httpGetProfileData(), httpGetCardsData()]).then(
     ([profileData, cardsData]) => {
       renderProfileInfo(profileData);
       renderCards(cardsData);
@@ -175,47 +172,44 @@ function httpDeleteMyCard(cardId) {
   return fetch(`${configFetch.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: configFetch.headers,
-  }).then((res) => {
-    if (res.ok) return res.json();
-    return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .catch((errorRes) => {
-    console.error(`Что-то пошло не так: ${errorRes.status}`);
-  });
+    .then((res) => {
+      if (res.ok) return res.json();
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }
 
 ////////////////////  лайкаем карточку  //////////////////////
 
 function httpLikeCard(cardId) {
-  return fetch(
-    `${configFetch.baseUrl}/cards/likes/${cardId}`,
-    {
-      method: "PUT",
-      headers: configFetch.headers,
-    }
-  ).then((res) => {
-    if (res.ok) return res.json();
-    return Promise.reject(`Ошибка: ${res.status}`);
+  return fetch(`${configFetch.baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: configFetch.headers,
   })
-  .catch((errorRes) => {
-    console.error(`Что-то пошло не так: ${errorRes.status}`);
-  });
+    .then((res) => {
+      if (res.ok) return res.json();
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }
 
 function httpDislikeCard(cardId) {
-  return fetch(
-    `${configFetch.baseUrl}/cards/likes/${cardId}`,
-    {
-      method: "DELETE",
-      headers: configFetch.headers,
-    }
-  ).then((res) => {
-    if (res.ok) return res.json();
-    return Promise.reject(`Ошибка: ${res.status}`);
+  return fetch(`${configFetch.baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: configFetch.headers,
   })
-  .catch((errorRes) => {
-    console.error(`Что-то пошло не так: ${errorRes.status}`);
-  });
+    .then((res) => {
+      if (res.ok) return res.json();
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }
 
 ////////////////////// СМЕНА АВАТАРА //////////////////////
@@ -227,11 +221,12 @@ function httpChangeAvatarImage() {
     body: JSON.stringify({
       avatar: avatarInput.value,
     }),
-  }).then((res) => {
-    if (res.ok) return res.json();
-    return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .catch((errorRes) => {
-    console.error(`Что-то пошло не так: ${errorRes.status}`);
-  });
+    .then((res) => {
+      if (res.ok) return res.json();
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }

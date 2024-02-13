@@ -87,4 +87,4 @@ const closePopupCardDeleteButton =
 const submitCardDelete =
   openPopupCardDeleteElement.querySelector(".popup__button");
 
-  const popups = document.querySelectorAll(".popup");
+const popups = document.querySelectorAll(".popup");

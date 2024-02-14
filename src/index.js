@@ -1,12 +1,11 @@
 import "./pages/index.css";
 //import { initialCards } from "./scripts/cards.js";
 import {
-  initApp,
   httpChangeProfileData,
+  httpGetProfileData,
+  httpGetCardsData,
   httpAddNewCard,
-  httpGetMyId,
   httpChangeAvatarImage,
-  // httpDeleteMyCard
 } from "./scripts/api.js";
 import { createCard } from "./scripts/card.js";
 import { openPopup, closePopup, closeEsc } from "./scripts/modal.js";
@@ -25,7 +24,6 @@ import {
   submitAvatar,
   nameInput,
   jobInput,
-  //avatarInput,
   profName,
   profJobtitle,
   profAvatar,
@@ -41,9 +39,7 @@ import {
   button,
   config,
   openPopupCardDeleteElement,
-  closePopupCardDeleteButton,
-  // submitCardDelete,
-  // popups
+  closePopupCardDeleteButton
 } from "./scripts/constants.js";
 
 //СОЗДАНИЕ КАРТОЧЕК
@@ -53,9 +49,36 @@ import {
 //   cardsOnline.append(cardNew);
 // });
 
-const isMyId = await httpGetMyId();
-// console.log(isMyId);
-initApp();
+let isMyId;
+
+function renderCards(cardsData) {
+  for (const cardData of cardsData) {
+    const cardNew = createCard(cardData, generatePopup);
+    cardsOnline.append(cardNew);
+  }
+}
+
+function renderProfileInfo(profileData) {
+  profName.textContent = profileData.name;
+  profJobtitle.textContent = profileData.about;
+  profAvatar.style.backgroundImage = `url(${profileData.avatar})`;
+}
+
+function getInitialData() {
+  Promise.all([httpGetProfileData(), httpGetCardsData()]).then(
+    ([profileData, cardsData]) => {
+      isMyId = profileData._id;
+      renderProfileInfo(profileData);
+      renderCards(cardsData);
+    }
+      ).catch((errorRes) => {
+        console.error(`Что-то пошло не так: ${errorRes.status}`);
+      });
+    }
+
+
+
+getInitialData();
 
 // Ф-Я ОТКРЫВАНИЯ КАРТОЧКИ ПРИ КЛИКЕ
 
@@ -63,31 +86,39 @@ function generatePopup(initialCardsLink, initialCardsName) {
   openPopupElementImage.src = initialCardsLink;
   openPopupElementCaption.textContent = initialCardsName;
   openPopupElementImage.alt = initialCardsName;
-  openPopupElement.classList.add("popup_is-opened");
-  document.addEventListener("keydown", closeEsc);
+  openPopup(openPopupElement);
 }
 
-// включение валидации вызовом enableValidation все настройки передаются при вызове
+// ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕЁ generatePopup)
+
+closePopupButton.addEventListener("click", closeGenerateCard)
+function closeGenerateCard() {
+  closePopup(openPopupElement);
+};
+
+// ВКЛЮЧЕНИЕ ВАЛИДАЦИИ
 
 enableValidation(config, form);
 
 //ОТКРЫТИЯ/ЗАКРЫТИЕ КАРТОЧКИ ПРОФАЙЛ
 
-openProfileEditButton.addEventListener("click", function () {
+openProfileEditButton.addEventListener("click", openProfile);
+function openProfile() {
   nameInput.value = profName.textContent;
   jobInput.value = profJobtitle.textContent;
   openPopup(openPopupProfileElement);
-});
-closePopupEditButton.addEventListener("click", function () {
+};
+closePopupEditButton.addEventListener("click", closeProfile)
+function closeProfile() {
   clearValidation(form, config);
   closePopup(openPopupProfileElement);
-});
+};
 
 //РЕДАКТИРОВАНИЕ ПРОФИЛЯ И ОТПРАВКА //СОРАНЯЕМ ИЗМЕНЕНИЯ В ПРОФАЙЛЕ
 
-submitForm.addEventListener("submit", handleFormSubmit);
+submitForm.addEventListener("submit", handleProfileFormSubmit);
 
-function handleFormSubmit(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   button.textContent = "Сохранить...";
 
@@ -95,21 +126,25 @@ function handleFormSubmit(evt) {
     profName.textContent = data.name;
     profJobtitle.textContent = data.about;
     closePopup(openPopupProfileElement);
-    document.removeEventListener("keydown", closeEsc);
     clearValidation(form, config);
     button.textContent = "Сохранить";
+  }
+  ).catch((errorRes) => {
+    console.error(`Что-то пошло не так: ${errorRes.status}`);
   });
 }
 
 // ДОБАВЛЯЕМ/ЗАКРЫВАЕМ НОВУЮ КАРТОЧКУ
 
-openCardAddButton.addEventListener("click", function () {
+openCardAddButton.addEventListener("click", opencardAdd)
+function opencardAdd() {
   openPopup(openPopupAddElement);
-});
-closePopupAddButton.addEventListener("click", function () {
+};
+closePopupAddButton.addEventListener("click", closecardAdd)
+function closecardAdd() {
   clearValidation(form, config);
   closePopup(openPopupAddElement);
-});
+};
 
 // СОРАНЯЕМ НОВУЮ КАРТОЧКУ
 
@@ -124,16 +159,12 @@ function handlecardSubmit(evt) {
     cardsOnline.prepend(createdCard);
     evt.target.reset();
     closePopup(openPopupAddElement);
-    document.removeEventListener("keydown", closeEsc);
     button.textContent = "Сохранить";
-  });
-}
-
-// ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕЁ)
-
-closePopupButton.addEventListener("click", function () {
-  closePopup(openPopupElement);
+  }
+).catch((errorRes) => {
+  console.error(`Что-то пошло не так: ${errorRes.status}`);
 });
+}
 
 ////////////////////////  МЕНЯЕМ АВАТАР //////////////////////
 
@@ -155,10 +186,12 @@ function avatarSubmit(evt) {
   httpChangeAvatarImage(evt).then((data) => {
     profAvatar.style.backgroundImage = `url(${data.avatar})`;
     closePopup(openPopupAvatarElement);
-    document.removeEventListener("keydown", closeEsc);
     clearValidation(form, config);
     button.textContent = "Сохранить";
-  });
+  }
+).catch((errorRes) => {
+  console.error(`Что-то пошло не так: ${errorRes.status}`);
+});
 }
 /////////////////// ЗАКРЫТИЕ ПОПАПА ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ КАРТОЧКИ
 

@@ -1,17 +1,15 @@
 export {
-  initApp,
   httpChangeProfileData,
   httpAddNewCard,
   httpDeleteMyCard,
-  httpGetMyId,
   httpLikeCard,
   httpDislikeCard,
   httpChangeAvatarImage,
+  httpGetCardsData,
+  httpGetProfileData
 };
-import { createCard } from "./card.js";
-import { generatePopup } from "../index.js";
 import {
-  cardsOnline,
+  // cardsOnline,
   // openProfileEditButton,
   // openPopupProfileElement,
   // closePopupEditButton,
@@ -22,9 +20,9 @@ import {
   nameInput,
   jobInput,
   avatarInput,
-  profName,
-  profJobtitle,
-  profAvatar,
+  // profName,
+  // profJobtitle,
+  // profAvatar,
   // isMyId,
   // openCardAddButton,
   // openPopupAddElement,
@@ -53,24 +51,6 @@ const configFetch = {
 
 //////////////////// ПОЛУЧАЕМ ДАННЫЕ ПРОФИЛЯ С СЕРВЕРА/////////////
 
-function httpGetMyId() {
-  return fetch(`${configFetch.baseUrl}/users/me`, {
-    headers: {
-      authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
-    },
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Что-то пошло не так: ${res.status}`);
-    })
-    .then((res) => res._id)
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
-}
-
 function httpGetProfileData() {
   return fetch(`${configFetch.baseUrl}/users/me`, {
     headers: {
@@ -83,15 +63,6 @@ function httpGetProfileData() {
       }
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
-}
-
-function renderProfileInfo(profileData) {
-  profName.textContent = profileData.name;
-  profJobtitle.textContent = profileData.about;
-  profAvatar.style.backgroundImage = `url(${profileData.avatar})`;
 }
 
 ////////////////////// ПОЛУЧАЕМ КАРТОЧКИ С СЕРВЕРА   //////////////////////
@@ -108,25 +79,6 @@ function httpGetCardsData() {
       }
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
-}
-
-function renderCards(cardsData) {
-  for (const cardData of cardsData) {
-    const cardNew = createCard(cardData, generatePopup);
-    cardsOnline.append(cardNew);
-  }
-}
-
-function initApp() {
-  Promise.all([httpGetProfileData(), httpGetCardsData()]).then(
-    ([profileData, cardsData]) => {
-      renderProfileInfo(profileData);
-      renderCards(cardsData);
-    }
-  );
 }
 
 ////////////////////// РЕДАКТИРОВАНИЕ ПРОФИЛЯ //////////////////////
@@ -141,9 +93,6 @@ function httpChangeProfileData() {
     }),
   })
     .then((response) => response.json())
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
 }
 
 ////////////////////  Добавление новой карточки  //////////////////////
@@ -161,9 +110,6 @@ function httpAddNewCard() {
     }),
   })
     .then((response) => response.json())
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
 }
 
 ////////////////////  удаляем карточку  //////////////////////
@@ -226,7 +172,4 @@ function httpChangeAvatarImage() {
       if (res.ok) return res.json();
       return Promise.reject(`Ошибка: ${res.status}`);
     })
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
 }

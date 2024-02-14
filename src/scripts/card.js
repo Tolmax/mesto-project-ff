@@ -14,8 +14,7 @@ function createCard(cardData, generatePopup) {
   const deleteButton = cardElement.querySelector(".card__delete-button");
   const likeButton = cardElement.querySelector(".card__like-button");
   const cardNumber = cardElement.querySelector(".card__like-number");
-  // let isCardILiked = cardLikedByUs(cardData);
-  // console.log(cardData);
+  let isCardILiked = cardLikedByUs(cardData);
 
   cardTitle.textContent = cardData.name;
   cardImage.alt = "фотография " + cardData.name;
@@ -44,7 +43,7 @@ function createCard(cardData, generatePopup) {
       submitCardDelete.addEventListener("click", cardDeleteSubmit);
       function cardDeleteSubmit() {
         httpDeleteMyCard(cardData._id).then(() => {
-          console.log(cardData._id);
+          // console.log(cardData._id);
           closePopup(openPopupCardDeleteElement);
           document.removeEventListener("keydown", closeEsc);
           submitCardDelete.removeEventListener("click", cardDeleteSubmit);
@@ -93,7 +92,7 @@ function createCard(cardData, generatePopup) {
   return cardElement;
 }
 
-let isCardILiked = function cardLikedByUs(cardData) {
+function cardLikedByUs(cardData) {
   let cardIsLikedByUs = false;
 
   for (const userWhoLiked of cardData.likes) {

@@ -8,7 +8,7 @@ import {
   httpChangeAvatarImage,
 } from "./scripts/api.js";
 import { createCard } from "./scripts/card.js";
-import { openPopup, closePopup, closeEsc } from "./scripts/modal.js";
+import { openPopup, closePopup } from "./scripts/modal.js";
 import { enableValidation } from "./scripts/validation.js";
 import { clearValidation } from "./scripts/validation.js";
 export { generatePopup, isMyId };
@@ -98,7 +98,7 @@ function closeGenerateCard() {
 
 // ВКЛЮЧЕНИЕ ВАЛИДАЦИИ
 
-enableValidation(config, form);
+enableValidation(config);
 
 //ОТКРЫТИЯ/ЗАКРЫТИЕ КАРТОЧКИ ПРОФАЙЛ
 

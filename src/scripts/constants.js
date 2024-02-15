@@ -76,7 +76,8 @@ const config = {
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_active",
+  errorClass: "popup__input-error_active",
+  inactivButton: "popup__button_inactive"
 };
 
 const openPopupCardDeleteElement = document.querySelector(

@@ -2,6 +2,7 @@ import { httpDeleteMyCard, httpLikeCard, httpDislikeCard } from "./api.js";
 import { isMyId } from "../index.js";
 import { openPopupCardDeleteElement, submitCardDelete } from "./constants.js";
 import { openPopup, closePopup, closeEsc } from "./modal.js";
+export { createCard };
 
 const cardTemplate = document
   .querySelector("#card-template")
@@ -21,43 +22,30 @@ function createCard(cardData, generatePopup) {
   cardImage.src = cardData.link;
   cardNumber.textContent = cardData.likes.length;
 
-  const changeLikeButtonActiveClass = (isCardILikedLocal) => {
-    const activeClass = "card__like-button_is-active";
 
+  if (isMyId !== cardData.owner._id) {
+    deleteButton.style.visibility = "hidden";
+  } else {
+  deleteButton.addEventListener("click", function() {
+    onDeleteCard(cardData, cardElement)})
+  }
+  
+
+  function changeLikeButtonActiveClass(isCardILikedLocal) {
+    const activeClass = "card__like-button_is-active";
+  
     if (isCardILikedLocal === true) {
       likeButton.classList.add(activeClass);
     } else {
       likeButton.classList.remove(activeClass);
     }
-  };
-
+  }
   changeLikeButtonActiveClass(isCardILiked);
 
-  if (isMyId !== cardData.owner._id) {
-    deleteButton.style.visibility = "hidden";
-  } else {
-    deleteButton.addEventListener("click", deleteBTN);
-
-    function deleteBTN() {
-      openPopup(openPopupCardDeleteElement);
-      submitCardDelete.addEventListener("click", cardDeleteSubmit);
-      function cardDeleteSubmit() {
-        httpDeleteMyCard(cardData._id).then(() => {
-          // console.log(cardData._id);
-          closePopup(openPopupCardDeleteElement);
-          document.removeEventListener("keydown", closeEsc);
-          submitCardDelete.removeEventListener("click", cardDeleteSubmit);
-          deleteButton.closest(".card").remove();
-        });
-      }
-    }
-  }
-
-  cardImage.addEventListener("click", function () {
-    generatePopup(cardData.link, cardData.name);
-  });
+  // likeButton.addEventListener("click", onLikeCard);
 
   likeButton.addEventListener("click", function () {
+    
     const likeCard = () => {
       httpLikeCard(cardData._id)
         .then((newCardData) => {
@@ -89,11 +77,19 @@ function createCard(cardData, generatePopup) {
     }
   });
 
+// увеличиваем карточку
+
+  cardImage.addEventListener("click", function () {
+    generatePopup(cardData.link, cardData.name);
+  });
+
   return cardElement;
 }
 
+///////////////////// ЛАЙК КАРТОЧКИ ///////////////////////
+
 function cardLikedByUs(cardData) {
-  let cardIsLikedByUs = false;
+  // let cardIsLikedByUs = false;
 
   for (const userWhoLiked of cardData.likes) {
     if (userWhoLiked._id === isMyId) {
@@ -101,8 +97,34 @@ function cardLikedByUs(cardData) {
     }
   }
 }
-// function deleteCard(evt) {
-//   evt.target.closest(".card").remove();
+
+///////////////////// ПРОВЕРЯЕМ ЛАЙКАЛИ ЛИ КАРТОЧКУ ПРИ ПЕРВОМ ПОЛУЧЕНИИ ДАННЫХ С СЕРВЕРА //////////////
+
+// const changeLikeButtonActiveClass = (isCardILikedLocal) => {
+//   const activeClass = "card__like-button_is-active";
+//   console.log(likeButton)
+//   if (isCardILikedLocal === true) {
+//     likeButton.classList.add(activeClass);
+//   } else {
+//     likeButton.classList.remove(activeClass);
+//   }
 // }
 
-export { createCard };
+ 
+//////////////////// УДАЛЕНИЕ КАРТОЧКИ ///////////////////////////
+
+  function onDeleteCard(cardData, element) {
+    openPopup(openPopupCardDeleteElement);
+    submitCardDelete.addEventListener("click", cardDeleteSubmit);
+    function cardDeleteSubmit() {
+      const delButton = element.querySelector(".card__delete-button");
+      httpDeleteMyCard(cardData._id).then(() => {
+        
+        closePopup(openPopupCardDeleteElement);
+        document.removeEventListener("keydown", closeEsc);
+        submitCardDelete.removeEventListener("click", cardDeleteSubmit);
+        delButton.closest(".card").remove();
+      });
+    }
+  }
+

@@ -51,9 +51,10 @@ import {
 
 let isMyId;
 
+
 function renderCards(cardsData) {
   for (const cardData of cardsData) {
-    const cardNew = createCard(cardData, generatePopup);
+    const cardNew = createCard(cardData, generatePopup, isMyId);
     cardsOnline.append(cardNew);
   }
 }

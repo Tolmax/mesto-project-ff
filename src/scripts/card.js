@@ -42,40 +42,46 @@ function createCard(cardData, generatePopup) {
   }
   changeLikeButtonActiveClass(isCardILiked);
 
-  // likeButton.addEventListener("click", onLikeCard);
-
-  likeButton.addEventListener("click", function () {
-    
-    const likeCard = () => {
-      httpLikeCard(cardData._id)
-        .then((newCardData) => {
-          isCardILiked = true;
-          changeLikeButtonActiveClass(true);
-          cardNumber.textContent = newCardData.likes.length;
-        })
-        .catch(() => {
-          console.error("Карточку не получилось лайкнуть");
-        });
-    };
-
-    const dislikeCard = () => {
-      httpDislikeCard(cardData._id)
-        .then((newCardData) => {
-          isCardILiked = false;
-          changeLikeButtonActiveClass(false);
-          cardNumber.textContent = newCardData.likes.length;
-        })
-        .catch(() => {
-          console.error("Карточку не получилось дизлайкнуть");
-        });
-    };
-
-    if (isCardILiked === true) {
-      dislikeCard();
-    } else {
-      likeCard();
-    }
+  likeButton.addEventListener("click", function () { 
+    cardLikedByUs(cardData);
+    console.log(cardLikedByUs(cardData));
+    console.log(cardData.likes._id);
+    console.log(isMyId);
+    onLikeCard(cardData, cardElement, changeLikeButtonActiveClass);
   });
+
+  // likeButton.addEventListener("click", function () {
+    
+  //   const likeCard = () => {
+  //     httpLikeCard(cardData._id)
+  //       .then((newCardData) => {
+  //         isCardILiked = true;
+  //         changeLikeButtonActiveClass(true);
+  //         cardNumber.textContent = newCardData.likes.length;
+  //       })
+  //       .catch(() => {
+  //         console.error("Карточку не получилось лайкнуть");
+  //       });
+  //   };
+
+  //   const dislikeCard = () => {
+  //     httpDislikeCard(cardData._id)
+  //       .then((newCardData) => {
+  //         isCardILiked = false;
+  //         changeLikeButtonActiveClass(false);
+  //         cardNumber.textContent = newCardData.likes.length;
+  //       })
+  //       .catch(() => {
+  //         console.error("Карточку не получилось дизлайкнуть");
+  //       });
+  //   };
+
+  //   if (isCardILiked === true) {
+  //     dislikeCard();
+  //   } else {
+  //     likeCard();
+  //   }
+  // });
 
 // увеличиваем карточку
 
@@ -89,14 +95,50 @@ function createCard(cardData, generatePopup) {
 ///////////////////// ЛАЙК КАРТОЧКИ ///////////////////////
 
 function cardLikedByUs(cardData) {
-  // let cardIsLikedByUs = false;
+  let cardIsLikedByUs = false;
 
   for (const userWhoLiked of cardData.likes) {
     if (userWhoLiked._id === isMyId) {
       return true;
-    }
+    } 
+    // else {
+    //   return false;
+    // }
   }
 }
+
+function onLikeCard(cardData, element, changeLikeButtonActiveClass) {
+  const cardNumber = element.querySelector('.card__like-number')
+  const likeButton = element.querySelector(".card__like-button");
+  const likeCard = () => {
+    httpLikeCard(cardData._id)
+      .then((newCardData) => {
+        // isCardILiked = true;
+        changeLikeButtonActiveClass(true);
+        cardNumber.textContent = newCardData.likes.length;
+      })
+      .catch(() => {
+        console.error("Карточку не получилось лайкнуть");
+      });
+  };
+
+  const dislikeCard = () => {
+    httpDislikeCard(cardData._id)
+      .then((newCardData) => {
+        // isCardILiked = false;
+        changeLikeButtonActiveClass(false);
+        cardNumber.textContent = newCardData.likes.length;
+      })
+      .catch(() => {
+        console.error("Карточку не получилось дизлайкнуть");
+      });
+  };
+  if (likeButton.classList.contains("card__like-button_is-active")) {
+    dislikeCard();
+  } else {
+    likeCard();
+  }
+};
 
 ///////////////////// ПРОВЕРЯЕМ ЛАЙКАЛИ ЛИ КАРТОЧКУ ПРИ ПЕРВОМ ПОЛУЧЕНИИ ДАННЫХ С СЕРВЕРА //////////////
 
@@ -126,5 +168,4 @@ function cardLikedByUs(cardData) {
         delButton.closest(".card").remove();
       });
     }
-  }
-
+  } 

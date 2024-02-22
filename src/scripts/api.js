@@ -6,40 +6,9 @@ export {
   httpDislikeCard,
   httpChangeAvatarImage,
   httpGetCardsData,
-  httpGetProfileData
+  httpGetProfileData,
 };
-import {
-  // cardsOnline,
-  // openProfileEditButton,
-  // openPopupProfileElement,
-  // closePopupEditButton,
-  // submitForm,
-  // openAvatarButton,
-  // closePopupAvatarButton,
-  // submitAvatar,
-  nameInput,
-  jobInput,
-  avatarInput,
-  // profName,
-  // profJobtitle,
-  // profAvatar,
-  // isMyId,
-  // openCardAddButton,
-  // openPopupAddElement,
-  // closePopupAddButton,
-  submitCard,
-  // openPopupElement,
-  // closePopupButton,
-  // openPopupElementImage,
-  // openPopupElementCaption,
-  // button,
-  // form,
-  // config,
-  // openPopupCardDeleteElement,
-  // closePopupCardDeleteButton,
-  // submitCardDelete,
-  // popups
-} from "./constants.js";
+import { nameInput, jobInput, avatarInput, submitCard } from "./constants.js";
 
 const configFetch = {
   baseUrl: "https://nomoreparties.co/v1/wff-cohort-3",
@@ -57,12 +26,8 @@ function httpGetProfileData() {
       authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
     },
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Что-то пошло не так: ${res.status}`);
-    })
+    .then(httpJson)
+    .catch(httpCatch);
 }
 
 ////////////////////// ПОЛУЧАЕМ КАРТОЧКИ С СЕРВЕРА   //////////////////////
@@ -73,12 +38,8 @@ function httpGetCardsData() {
       authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
     },
   })
-    .then((res) => {
-      if (res.ok) {
-      return res.json();
-      }
-      return Promise.reject(`Что-то пошло не так: ${res.status}`);
-    })
+    .then(httpJson)
+    .catch(httpCatch);
 }
 
 ////////////////////// РЕДАКТИРОВАНИЕ ПРОФИЛЯ //////////////////////
@@ -92,7 +53,8 @@ function httpChangeProfileData() {
       about: jobInput.value,
     }),
   })
-    .then((response) => response.json())
+    .then(httpJson)
+    .catch(httpCatch);
 }
 
 ////////////////////  Добавление новой карточки  //////////////////////
@@ -109,7 +71,8 @@ function httpAddNewCard() {
       link: cardImageInput.value,
     }),
   })
-    .then((response) => response.json())
+    .then(httpJson)
+    .catch(httpCatch);
 }
 
 ////////////////////  удаляем карточку  //////////////////////
@@ -119,13 +82,8 @@ function httpDeleteMyCard(cardId) {
     method: "DELETE",
     headers: configFetch.headers,
   })
-    .then((res) => {
-      if (res.ok) return res.json();
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
+    .then(httpJson)
+    .catch(httpCatch);
 }
 
 ////////////////////  лайкаем карточку  //////////////////////
@@ -135,13 +93,8 @@ function httpLikeCard(cardId) {
     method: "PUT",
     headers: configFetch.headers,
   })
-    .then((res) => {
-      if (res.ok) return res.json();
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
+    .then(httpJson)
+    .catch(httpCatch);
 }
 
 function httpDislikeCard(cardId) {
@@ -149,13 +102,8 @@ function httpDislikeCard(cardId) {
     method: "DELETE",
     headers: configFetch.headers,
   })
-    .then((res) => {
-      if (res.ok) return res.json();
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((errorRes) => {
-      console.error(`Что-то пошло не так: ${errorRes.status}`);
-    });
+    .then(httpJson)
+    .catch(httpCatch);
 }
 
 ////////////////////// СМЕНА АВАТАРА //////////////////////
@@ -168,8 +116,15 @@ function httpChangeAvatarImage() {
       avatar: avatarInput.value,
     }),
   })
-    .then((res) => {
-      if (res.ok) return res.json();
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(httpJson)
+    .catch(httpCatch);
+}
+
+function httpJson(res) {
+  if (res.ok) return res.json();
+  return Promise.reject(res);
+}
+
+function httpCatch(errorRes) {
+  console.error(errorRes);
 }

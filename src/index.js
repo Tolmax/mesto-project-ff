@@ -1,5 +1,4 @@
 import "./pages/index.css";
-//import { initialCards } from "./scripts/cards.js";
 import {
   httpChangeProfileData,
   httpGetProfileData,
@@ -7,7 +6,7 @@ import {
   httpAddNewCard,
   httpChangeAvatarImage,
 } from "./scripts/api.js";
-import { createCard } from "./scripts/card.js";
+import { createCard, onLikeCard, onDeleteCard } from "./scripts/card.js";
 import { openPopup, closePopup } from "./scripts/modal.js";
 import { enableValidation } from "./scripts/validation.js";
 import { clearValidation } from "./scripts/validation.js";
@@ -39,22 +38,22 @@ import {
   button,
   config,
   openPopupCardDeleteElement,
-  closePopupCardDeleteButton
+  closePopupCardDeleteButton,
 } from "./scripts/constants.js";
 
 //СОЗДАНИЕ КАРТОЧЕК
 
-// initialCards.forEach(function ({ link, name }) {
-//   const cardNew = createCard(link, name, deleteCard, generatePopup, likeCard);
-//   cardsOnline.append(cardNew);
-// });
-
 let isMyId;
-
 
 function renderCards(cardsData) {
   for (const cardData of cardsData) {
-    const cardNew = createCard(cardData, generatePopup, isMyId);
+    const cardNew = createCard(
+      cardData,
+      generatePopup,
+      isMyId,
+      onLikeCard,
+      onDeleteCard
+    );
     cardsOnline.append(cardNew);
   }
 }
@@ -72,12 +71,8 @@ function getInitialData() {
       renderProfileInfo(profileData);
       renderCards(cardsData);
     }
-      ).catch((errorRes) => {
-        console.error(`Что-то пошло не так: ${errorRes.status}`);
-      });
-    }
-
-
+  );
+}
 
 getInitialData();
 
@@ -92,10 +87,10 @@ function generatePopup(initialCardsLink, initialCardsName) {
 
 // ЗАКРЫВАЕМ КАРТОЧКУ (ОТКРЫТА ПРИ НАЖАТИИ НА НЕЁ generatePopup)
 
-closePopupButton.addEventListener("click", closeGenerateCard)
+closePopupButton.addEventListener("click", closeGenerateCard);
 function closeGenerateCard() {
   closePopup(openPopupElement);
-};
+}
 
 // ВКЛЮЧЕНИЕ ВАЛИДАЦИИ
 
@@ -108,12 +103,12 @@ function openProfile() {
   nameInput.value = profName.textContent;
   jobInput.value = profJobtitle.textContent;
   openPopup(openPopupProfileElement);
-};
-closePopupEditButton.addEventListener("click", closeProfile)
+}
+closePopupEditButton.addEventListener("click", closeProfile);
 function closeProfile() {
   clearValidation(form, config);
   closePopup(openPopupProfileElement);
-};
+}
 
 //РЕДАКТИРОВАНИЕ ПРОФИЛЯ И ОТПРАВКА //СОРАНЯЕМ ИЗМЕНЕНИЯ В ПРОФАЙЛЕ
 
@@ -123,29 +118,30 @@ function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   button.textContent = "Сохранить...";
 
-  httpChangeProfileData().then((data) => {
-    profName.textContent = data.name;
-    profJobtitle.textContent = data.about;
-    closePopup(openPopupProfileElement);
-    clearValidation(form, config);
-    button.textContent = "Сохранить";
-  }
-  ).catch((errorRes) => {
-    console.error(`Что-то пошло не так: ${errorRes.status}`);
-  });
+  httpChangeProfileData()
+    .then((data) => {
+      profName.textContent = data.name;
+      profJobtitle.textContent = data.about;
+      closePopup(openPopupProfileElement);
+      clearValidation(form, config);
+      button.textContent = "Сохранить";
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }
 
 // ДОБАВЛЯЕМ/ЗАКРЫВАЕМ НОВУЮ КАРТОЧКУ
 
-openCardAddButton.addEventListener("click", opencardAdd)
+openCardAddButton.addEventListener("click", opencardAdd);
 function opencardAdd() {
   openPopup(openPopupAddElement);
-};
-closePopupAddButton.addEventListener("click", closecardAdd)
+}
+closePopupAddButton.addEventListener("click", closecardAdd);
 function closecardAdd() {
   clearValidation(form, config);
   closePopup(openPopupAddElement);
-};
+}
 
 // СОРАНЯЕМ НОВУЮ КАРТОЧКУ
 
@@ -155,16 +151,25 @@ function handlecardSubmit(evt) {
   evt.preventDefault();
   button.textContent = "Сохранить...";
 
-  httpAddNewCard().then((data) => {
-    const createdCard = createCard(data, generatePopup);
-    cardsOnline.prepend(createdCard);
-    evt.target.reset();
-    closePopup(openPopupAddElement);
-    button.textContent = "Сохранить";
-  }
-).catch((errorRes) => {
-  console.error(`Что-то пошло не так: ${errorRes.status}`);
-});
+  httpAddNewCard()
+    .then((cardData) => {
+      // const createdCard = createCard(data, generatePopup);
+      // isMyId = cardData._id;
+      const createdCard = createCard(
+        cardData,
+        generatePopup,
+        isMyId,
+        onLikeCard,
+        onDeleteCard
+      );
+      cardsOnline.prepend(createdCard);
+      evt.target.reset();
+      closePopup(openPopupAddElement);
+      button.textContent = "Сохранить";
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }
 
 ////////////////////////  МЕНЯЕМ АВАТАР //////////////////////
@@ -184,15 +189,16 @@ submitAvatar.addEventListener("submit", avatarSubmit);
 function avatarSubmit(evt) {
   evt.preventDefault();
 
-  httpChangeAvatarImage(evt).then((data) => {
-    profAvatar.style.backgroundImage = `url(${data.avatar})`;
-    closePopup(openPopupAvatarElement);
-    clearValidation(form, config);
-    button.textContent = "Сохранить";
-  }
-).catch((errorRes) => {
-  console.error(`Что-то пошло не так: ${errorRes.status}`);
-});
+  httpChangeAvatarImage(evt)
+    .then((data) => {
+      profAvatar.style.backgroundImage = `url(${data.avatar})`;
+      closePopup(openPopupAvatarElement);
+      clearValidation(form, config);
+      button.textContent = "Сохранить";
+    })
+    .catch((errorRes) => {
+      console.error(`Что-то пошло не так: ${errorRes.status}`);
+    });
 }
 /////////////////// ЗАКРЫТИЕ ПОПАПА ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ КАРТОЧКИ
 

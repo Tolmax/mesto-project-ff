@@ -1,39 +1,17 @@
 export { closeEsc, openPopup, closePopup };
+import { cardDeleteSubmit } from "./card.js";
 import {
-  // cardsOnline,
-  // openProfileEditButton,
   openPopupProfileElement,
-  // closePopupEditButton,
-  // submitForm,
-  // openAvatarButton,
   openPopupAvatarElement,
-  // closePopupAvatarButton,
-  // submitAvatar,
-  // nameInput,
-  // jobInput,
-  // avatarInput,
-  // profName,
-  // profJobtitle,
-  // profAvatar,
-  //isMyId,
-  // openCardAddButton,
   openPopupAddElement,
-  // closePopupAddButton,
-  // submitCard,
   openPopupElement,
-  // closePopupButton,
-  // openPopupElementImage,
-  // openPopupElementCaption,
   form,
-  //button,
   config,
   openPopupCardDeleteElement,
-  //closePopupCardDeleteButton,
+  submitCardDelete,
   popups
 } from "./constants.js";
 import { clearValidation } from "./validation.js";
-
-
 
 function openPopup(popup) {
   popup.classList.add("popup_is-opened");
@@ -43,6 +21,7 @@ function openPopup(popup) {
 function closePopup(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeEsc);
+  submitCardDelete.removeEventListener("click", cardDeleteSubmit);
 }
 
 function closeEsc(evt) {
@@ -57,9 +36,10 @@ function closeEsc(evt) {
 }
 //ЗАКРЫВАЕМ ПО КЛИКУ ПО ПОЛЮ OVERLAY
 
-popups.forEach(function (item) {
-  item.addEventListener("click", function (evt) {
-    if (evt.target === item) {
+popups.forEach(function(popup) {
+  // console.log(item);
+  popup.addEventListener("click", function (evt) {
+    if (evt.target === popup) {
       clearValidation(form, config);
       closePopup(openPopupProfileElement);
       closePopup(openPopupAddElement);

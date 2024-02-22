@@ -18,3 +18,7 @@
   font-weight: 900;
   src: url("./fonts/Inter-Black.woff2") format("woff2");
 }
+
+/* .card[data-id="65ce52ed889c8e0019aaf120"] {
+  border: 20px solid orange;
+} */

@@ -39,6 +39,7 @@ import {
   config,
   openPopupCardDeleteElement,
   closePopupCardDeleteButton,
+  openedPopup
 } from "./scripts/constants.js";
 
 //СОЗДАНИЕ КАРТОЧЕК
@@ -70,11 +71,20 @@ function getInitialData() {
       isMyId = profileData._id;
       renderProfileInfo(profileData);
       renderCards(cardsData);
-    }
-  );
+    })
+    .catch((errorRes) => {
+      console.error('Ошибка загрузки данных', errorRes);
+    })
 }
 
 getInitialData();
+
+
+
+// openedPopup.addEventListener('click', openPopupClose);
+// function openPopupClose(){
+//   closePopup(openedPopup);
+// };
 
 // Ф-Я ОТКРЫВАНИЯ КАРТОЧКИ ПРИ КЛИКЕ
 
@@ -153,8 +163,6 @@ function handlecardSubmit(evt) {
 
   httpAddNewCard()
     .then((cardData) => {
-      // const createdCard = createCard(data, generatePopup);
-      // isMyId = cardData._id;
       const createdCard = createCard(
         cardData,
         generatePopup,

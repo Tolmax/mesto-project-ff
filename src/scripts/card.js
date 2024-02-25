@@ -76,7 +76,6 @@ function onLikeCard(cardData, element) {
   const likeCard = () => {
     httpLikeCard(cardData._id)
       .then((newCardData) => {
-        // console.log('likeCard id', newCardData._id);
         changeLikeButtonActiveClass(likeButton, newCardData);
         cardNumber.textContent = newCardData.likes.length;
       })
@@ -126,6 +125,9 @@ function cardDeleteSubmit() {
     closePopup(openPopupCardDeleteElement);
     submitCardDelete.removeEventListener("click", cardDeleteSubmit);
     cardDeleted.remove();
+  })
+  .catch((errorRes) => {
+    console.error(`Что-то пошло не так: ${errorRes.status}`);
   });
 }
 

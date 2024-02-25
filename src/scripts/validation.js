@@ -1,8 +1,4 @@
-export {
-  isValid,
-  enableValidation,
-  clearValidation
-}
+export { isValid, enableValidation, clearValidation };
 
 // Функция, которая проверяет валидность поля
 

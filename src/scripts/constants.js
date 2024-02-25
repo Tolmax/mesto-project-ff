@@ -28,7 +28,8 @@ export {
   openPopupCardDeleteElement,
   closePopupCardDeleteButton,
   submitCardDelete,
-  popups
+  popups,
+  openedPopup
 };
 
 const cardsOnline = document.querySelector(".places__list");
@@ -89,3 +90,4 @@ const submitCardDelete =
   openPopupCardDeleteElement.querySelector(".popup__button");
 
 const popups = document.querySelectorAll(".popup");
+const openedPopup = document.querySelector('.popup_is-opened');

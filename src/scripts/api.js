@@ -25,9 +25,7 @@ function httpGetProfileData() {
     headers: {
       authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
     },
-  })
-    .then(httpJson)
-    .catch(httpCatch);
+  }).then(httpJson);
 }
 
 ////////////////////// ПОЛУЧАЕМ КАРТОЧКИ С СЕРВЕРА   //////////////////////
@@ -37,9 +35,7 @@ function httpGetCardsData() {
     headers: {
       authorization: "c3983116-e362-4de3-b314-b984b8daa8fe",
     },
-  })
-    .then(httpJson)
-    .catch(httpCatch);
+  }).then(httpJson);
 }
 
 ////////////////////// РЕДАКТИРОВАНИЕ ПРОФИЛЯ //////////////////////
@@ -52,9 +48,7 @@ function httpChangeProfileData() {
       name: nameInput.value,
       about: jobInput.value,
     }),
-  })
-    .then(httpJson)
-    .catch(httpCatch);
+  }).then(httpJson);
 }
 
 ////////////////////  Добавление новой карточки  //////////////////////
@@ -70,9 +64,7 @@ function httpAddNewCard() {
       name: cardNameInput.value,
       link: cardImageInput.value,
     }),
-  })
-    .then(httpJson)
-    .catch(httpCatch);
+  }).then(httpJson);
 }
 
 ////////////////////  удаляем карточку  //////////////////////
@@ -81,9 +73,7 @@ function httpDeleteMyCard(cardId) {
   return fetch(`${configFetch.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: configFetch.headers,
-  })
-    .then(httpJson)
-    .catch(httpCatch);
+  }).then(httpJson);
 }
 
 ////////////////////  лайкаем карточку  //////////////////////
@@ -92,18 +82,14 @@ function httpLikeCard(cardId) {
   return fetch(`${configFetch.baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",
     headers: configFetch.headers,
-  })
-    .then(httpJson)
-    .catch(httpCatch);
+  }).then(httpJson);
 }
 
 function httpDislikeCard(cardId) {
   return fetch(`${configFetch.baseUrl}/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: configFetch.headers,
-  })
-    .then(httpJson)
-    .catch(httpCatch);
+  }).then(httpJson);
 }
 
 ////////////////////// СМЕНА АВАТАРА //////////////////////
@@ -115,9 +101,7 @@ function httpChangeAvatarImage() {
     body: JSON.stringify({
       avatar: avatarInput.value,
     }),
-  })
-    .then(httpJson)
-    .catch(httpCatch);
+  }).then(httpJson);
 }
 
 function httpJson(res) {
@@ -125,6 +109,6 @@ function httpJson(res) {
   return Promise.reject(res);
 }
 
-function httpCatch(errorRes) {
-  console.error(errorRes);
-}
+// function httpCatch(errorRes) {
+//   console.error(errorRes);
+// }
